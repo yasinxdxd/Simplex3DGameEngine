@@ -9,7 +9,7 @@ layout(location = 3) in vec4 vertex_color;
 //outs:
 out vec4 vertex_color_to_fragment;
 out vec3 vertex_normal_to_fragment;
-out vec3 fragment_position;
+out vec3 model_vertex_position;
 //uniforms:
 uniform mat4 model;
 uniform mat4 view;
@@ -19,9 +19,10 @@ uniform mat4 projection;
 void main()
 {
 	vertex_color_to_fragment = vertex_color;
-	vertex_normal_to_fragment = vertex_normal;
-	fragment_position = vec3(model * vec4(vertex_position, 1.0));
+	//vertex_normal_to_fragment = vertex_normal;
+	vertex_normal_to_fragment = mat3(transpose(inverse(model))) * vertex_normal;
+	model_vertex_position = vec3(model * vec4(vertex_position, 1.0));
 
 
-	gl_Position = projection * view * vec4(fragment_position, 1.0);
+	gl_Position = projection * view * vec4(model_vertex_position, 1.0);
 } 
