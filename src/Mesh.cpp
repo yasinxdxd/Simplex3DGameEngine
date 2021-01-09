@@ -66,7 +66,7 @@ namespace Simplex3D
 
 
 		//data:
-		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Simplex3D::Vertex), m_vertices.data(), GL_STATIC_DRAW);//
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Simplex3D::Vertex), m_vertices.data(), GL_STATIC_DRAW);//GL_STATIC_DRAW //GL_DYNAMIC_DRAW
 		//data:
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
@@ -87,7 +87,7 @@ namespace Simplex3D
 		
 		unBind();
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//GL_LINE  GL_FILL GL_POINT
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//GL_LINE  GL_FILL GL_POINT
 	}
 
 	std::vector<Simplex3D::Vertex> Mesh::getVertices() const
@@ -106,19 +106,34 @@ namespace Simplex3D
 		//model = glm::rotate(model, glm::radians(a), glm::vec3(0.0f, 1.0f, 0.f));
 		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		
+
+		//projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 1000000.0f);
+		m_view = cam.view;
 		m_model = model;
 
-		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 300.0f);
-		//projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
 
-		m_view = cam.view;
 
-		shader.use();
+		
+
 		//all drawing stuff
+		shader.use();
 		shader.uniformMatrix4fv("model", 1, false, glm::value_ptr(m_model));
 		shader.uniformMatrix4fv("view", 1, false, glm::value_ptr(m_view));
 		shader.uniformMatrix4fv("projection", 1, false, glm::value_ptr(m_projection));
 		
+
+		//lightning
+		shader.use();
+		shader.uniform3f("light_position", -100, 60, -12);
+		shader.uniform3fv("view_position", 1, glm::value_ptr(cam.position));
+		bind();
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Simplex3D::Vertex), (void*)offsetof(Simplex3D::Vertex, Simplex3D::Vertex::normal));
+		glEnableVertexAttribArray(2);
+		unBind();
+
+
+
 		
 		bind();
 		//if(m_indices.size() == 0)

@@ -119,11 +119,5 @@ namespace Simplex3D
 		}
 	}
 
-	void Model::drawMeshes(Window& window, Camera cam)
-	{
-		for (auto m : m_meshes)
-			m->draw(window, cam, m_model_matrix, m_shader);
-	}
-	
 
 }

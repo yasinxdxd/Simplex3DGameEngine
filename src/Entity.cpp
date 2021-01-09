@@ -35,7 +35,9 @@ namespace Simplex3D
 
 	void Entity::setColor(glm::vec4 color)
 	{
-
+		for (auto m : m_meshes)
+			for (U16 i = 0; i < m->getVertices().size(); i++)
+				m->getVertices()[i].color = color;
 	}
 
 	void Entity::setRotateX(float angle)
@@ -81,7 +83,7 @@ namespace Simplex3D
 
 	glm::vec4 Entity::getColor() const
 	{
-		return glm::vec4(1);
+		return m_meshes[0]->getVertices()[0].color;
 	}
 
 	float Entity::getRotateX() const
@@ -118,5 +120,12 @@ namespace Simplex3D
 	{
 		return m_meshes;
 	}
+
+	void Entity::drawMeshes(Window& window, Camera cam)
+	{
+		for (auto m : m_meshes)
+			m->draw(window, cam, m_model_matrix, m_shader);
+	}
+
 
 }

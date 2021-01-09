@@ -14,7 +14,8 @@ namespace Simplex3D
 		up_axis({ 0.0f, 1.0f, 0.0f } ),
 		up({ 0.0f, 1.0f, 0.0f })
 	{ 
-		camera_speed = 0.05f;
+		camera_speed = 5.f;
+		rotate_speed = 0.5;
 		//rotation angles:
 		pitch = 0;	//x
 		yaw = -90;	//y
@@ -46,22 +47,28 @@ namespace Simplex3D
 		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 			position -= camera_speed * up_axis;
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			camera_speed = 0.2f;
+		{
+			camera_speed = 16.f; 
+			rotate_speed = 1;
+		}
 		else
-			camera_speed = 0.05;
+		{
+			camera_speed = 8.f;
+			rotate_speed = 0.3;
+		}
 		
 		
 		view = glm::lookAt(position, position + front_axis, up_axis);
 		
 		//rotate
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-			pitch += camera_speed * 10;
+			pitch += rotate_speed * 2;
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-			pitch -= camera_speed * 10;
+			pitch -= rotate_speed * 2;
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			yaw -= camera_speed * 10;
+			yaw -= rotate_speed * 2;
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			yaw += camera_speed * 10;
+			yaw += rotate_speed * 2;
 
 
 		direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));

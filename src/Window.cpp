@@ -113,7 +113,7 @@ namespace Simplex3D
 		glfwSetKeyCallback(m_window, WindowEvent::Keyboard::key_callback);
 		
 		std::stringstream ss;
-		ss << "Simplex3D" << " " << "0.01" << " [" << 1000/(m_delay-m_delta) << " FPS]";
+		ss << "Simplex3D" << " " << "0.01" << " [" << float(m_delay) << " FPS]";
 
 		glfwSetWindowTitle(m_window, ss.str().c_str());
 
