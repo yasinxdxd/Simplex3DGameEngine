@@ -10,7 +10,7 @@ namespace Simplex3D
 	{
 	protected:
 		Entity();
-		~Entity();
+		virtual ~Entity();
 
 	public:
 		void update()
@@ -44,6 +44,11 @@ namespace Simplex3D
 		virtual float getScaleZ() const;
 
 		std::vector<Simplex3D::Mesh*> getMeshes() const;
+
+	public:
+		virtual void drawMeshes(Window& window, Camera cam);
+
+
 
 	protected:
 		glm::mat4 m_model_matrix;

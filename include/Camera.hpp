@@ -18,7 +18,7 @@ namespace Simplex3D
 		~Camera();
 		void update(GLFWwindow* window);
 
-	private:
+	public:///DEGISTIR PUBLIC OLMAYACAK!!!!!!!!
 		glm::vec3 position;
 		glm::vec3 target;
 		glm::vec3 direction;
@@ -34,6 +34,7 @@ namespace Simplex3D
 
 
 		float camera_speed;
+		float rotate_speed;
 
 	public:
 		glm::mat4 view;

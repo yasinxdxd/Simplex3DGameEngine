@@ -22,7 +22,7 @@ namespace Simplex3D
 
 	public:
 
-		void drawMeshes(Window& window, Camera cam);
+		
 		bool loadModel(const char* file_path);
 		
 	private:
