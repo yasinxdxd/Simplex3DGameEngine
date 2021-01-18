@@ -49,7 +49,7 @@ namespace Simplex3D
 		//std::vector<Texture> textures;
 
 		//PROCESS VERTICES
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		for (U16 i = 0; i < mesh->mNumVertices; i++)
 		{
 			Simplex3D::Vertex vertex;
 

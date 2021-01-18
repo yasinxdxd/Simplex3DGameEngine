@@ -50,7 +50,7 @@ namespace Simplex3D
 		Simplex3D::Vertex({ 0.5f,  0.5f,  0.5f}),
 		Simplex3D::Vertex({ 0.5f,  0.5f,  0.5f}),
 		Simplex3D::Vertex({-0.5f,  0.5f,  0.5f}),
-		Simplex3D::Vertex({-0.5f,  0.5f, -0.5f}),
+		Simplex3D::Vertex({-0.5f,  0.5f, -0.5f})
 
 
 		};
@@ -64,4 +64,6 @@ namespace Simplex3D
 	{
 
 	}
+
+
 }

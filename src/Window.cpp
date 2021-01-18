@@ -59,7 +59,7 @@ namespace Simplex3D
 		}
 
 
-
+		//int x = 800, y = 250, w = 800, h = 450;
 		glViewport(0, 0, m_width, m_height);
 		glEnable(GL_DEPTH_TEST);
 

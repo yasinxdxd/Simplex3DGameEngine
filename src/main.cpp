@@ -10,44 +10,61 @@
 #include "Model.hpp"
 #include "Light.hpp"
 #include "Terrain.hpp"
+#include "EngineGUI.hpp"
+#include "BatchRenderer.hpp"
+
+
 
 //#include <thread>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <windows.h>
+//#include <windows.h>
 
 
 
 int main(int argc, char** argv)
 {
 	Simplex3D::Window myWindow(1920, 1080, "Simplex3D");
-	myWindow.setColor(72, 61, 139);
+	myWindow.setColor(69, 81, 161);
+    Simplex3D::EngineGUI::getInstace()->Init(myWindow);
+
+
+    //batch
+    Simplex3D::BatchRenderer batcRenderer;
+    //
+
+
+
 	Simplex3D::Camera cam;
 
-	
-
-	Simplex3D::Model shipModel;
-	shipModel.loadModel("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/ship_dark.obj");
-	
+    Simplex3D::Model suit("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/Nanosuit.obj");
+    Simplex3D::Model cow("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/cow.obj");
+    Simplex3D::Model coord("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/coord.obj");
+    Simplex3D::Model shipModel("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/ship_dark.obj");
 	Simplex3D::Model pirate("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/pirate_officer.obj");
-	
 	Simplex3D::Model tower("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/tower.obj");
-
 	Simplex3D::Model chest("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/chest.obj");
-
-    Simplex3D::Model palm("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/palm_short.obj");
-    
-    Simplex3D::Model teapot("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/teapot.obj");
-
-    //Simplex3D::Model dragon("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/dragonstl.obj");
-
-	Simplex3D::Light light;
-
+    //Simplex3D::Model palm("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/palm_short.obj");
+    //Simplex3D::Model teapot("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/teapot.obj");
+    Simplex3D::Light light;
     Simplex3D::Terrain terrain;
+    
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(suit, "crysisGuy");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(cow, "inek");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(coord, "coord");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(shipModel, "shipModel");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(pirate, "pirate");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(tower, "tower");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(chest, "chest");
+    //Simplex3D::EngineGUI::getInstace()->componentList.addEntity(palm);
+    //Simplex3D::EngineGUI::getInstace()->componentList.addEntity(teapot);
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(light, "light");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(terrain, "terrain");
+    
+    //std::vector<Simplex3D::Entity*> e;
 
-
-
+    //e.push_back(shipModel);
 
     /*
     std::ifstream file("C:/Users/Lenovo/Desktop/Coding/RemoteGyroscopePCSide/application.windows64/data.txt");
@@ -62,12 +79,11 @@ int main(int argc, char** argv)
     std::cout << "here1" << std::endl;
     */
     
-
     std::ofstream writeFile;
 
     std::ifstream readFile;
-    glm::vec3 pos;
-    glm::vec3 angles;
+    glm::vec3 pos(0, 0, 0);
+    glm::vec3 angles(0, 0, 0);
     bool isFileExist;
     readFile.open("save.ini");
     isFileExist = readFile.good();
@@ -85,8 +101,8 @@ int main(int argc, char** argv)
         cam.roll = angles.z;
     }
     
-
-    glEnable(GL_LIGHTING);
+    
+    //glEnable(GL_LIGHT);
 
 	float a = 0;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,54 +113,41 @@ int main(int argc, char** argv)
 		myWindow.pollEvent();
 		
 		cam.update(static_cast<GLFWwindow*>(myWindow));
-		
+        /*
+        coord.update();
         light.update();
 
         pirate.update();
-		shipModel.update();
+        //e[0]->update();
+        //shipModel->update();
 		tower.update();
 		chest.update();
         palm.update();
         teapot.update();
         terrain.update();
         //dragon.update();
+        
 
-
+        //e[0]->setPosition({ Simplex3D::EngineGUI::getInstace()->componentList.pos,0,0 });
 		
 		a+=0.4;
-        terrain.setScale({ 32,32,32 });
-        terrain.setPosition({0,0,0});
-
+        terrain.setScale({ 320,320,320 });
+        terrain.setPosition({-100,-117.5,-100});
         palm.setPosition({ -40,0,60 });
 		tower.setPosition({-20,0,50});
-		
-        shipModel.setPosition({ 0,0,0 });
-        //shipModel.setColor({1, 0.1, 0.3, 0.5});
-
         chest.setPosition({ -30,0,-12 });
 		pirate.setPosition({ -25,0,0 });
-		//pirate.setRotateX(a);
         pirate.setRotateY(a);
-        //pirate.setScale({ 5,5,5 });
-
-        //dragon.setPosition({-100, 60, -25});
-        //dragon.setScale({0.1, 0.1 , 0.1 });
-        
         teapot.setPosition({-110, 60 ,-12});
         teapot.setRotation(a*2, { 0.1, 1.0, 0.1 });
 
-        light.setPosition({ -100, 60,-12 });
+        light.setPosition({ -100, 1600,-12 });
         light.setScale({5,5,5});
+        */
 
-
-
+        
         //while(std::getline(file, line))
         
-
-
-
-
-
         /*
         file.open("C:/Users/Lenovo/Desktop/Coding/RemoteGyroscopePCSide/application.windows64/data.txt");
 
@@ -213,7 +216,7 @@ int main(int argc, char** argv)
         */
         
 
-
+        
 
         if (Simplex3D::WindowEvent::Keyboard::isKeyPressed(GLFW_KEY_ESCAPE))
         {
@@ -229,39 +232,23 @@ int main(int argc, char** argv)
             writeFile.close();
         }
 
+        //entities[0].update();
+        //entities[0].setPosition({ pos, 0, 0 });
 
-
-
-
-
-
-
-
-
-
-
-
+        Simplex3D::EngineGUI::getInstace()->update();
 		//DRAW:
 		myWindow.clear();
         
-        light.drawMeshes(myWindow, cam);
-        terrain.drawMeshes(myWindow, cam);
-
+        for(U16 i = 0; i < Simplex3D::EngineGUI::getInstace()->componentList.entityGUIs.size(); i++)
+            Simplex3D::EngineGUI::getInstace()->componentList.entityGUIs[i]->entity->drawMeshes(myWindow, cam, light.getPosition());
 		
-        shipModel.drawMeshes(myWindow, cam);
-		pirate.drawMeshes(myWindow, cam);
-		tower.drawMeshes(myWindow, cam);
-		chest.drawMeshes(myWindow, cam);
-        palm.drawMeshes(myWindow, cam);
-        teapot.drawMeshes(myWindow, cam);
-        
+        //batcRenderer.draw();
 
-        //dragon.drawMeshes(myWindow, cam);
-
+        Simplex3D::EngineGUI::getInstace()->render();
 		myWindow.display();
 	}
 
-	
+    //delete shipModel;
 
 	return 0;
 }

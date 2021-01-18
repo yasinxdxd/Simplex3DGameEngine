@@ -2,6 +2,7 @@
 #include "EngineGUI.hpp"
 #include "Window.hpp"
 
+
 namespace Simplex3D
 {
 
@@ -29,8 +30,10 @@ namespace Simplex3D
 
 
 		// Setup Dear ImGui style
-		//ImGui::StyleColorsDark();
-		ImGui::StyleColorsLight();
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsLight();
+		
+		//
 	}
 
 	EngineGUI::~EngineGUI()
@@ -53,6 +56,7 @@ namespace Simplex3D
 		ImGui::NewFrame();
 		///////////////////////////////////////////////////////
 		componentList.render();
+		menuBar.render();
 		///////////////////////////////////////////////////////
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

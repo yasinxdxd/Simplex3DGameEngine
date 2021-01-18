@@ -84,9 +84,9 @@ namespace Simplex3D
 
 	}
 
-	bool Shader::checkShaderCompile(U16& shader)
+	bool Shader::checkShaderCompile(unsigned int& shader)
 	{
-		I16  success;
+		int  success;
 		char infoLogV[256];
 		char infoLogF[256];
 
@@ -106,10 +106,10 @@ namespace Simplex3D
 
 	}
 
-	bool Shader::checkShaderLink(U16& program)
+	bool Shader::checkShaderLink(unsigned int& program)
 	{
 		/*for control the linking*/
-		I16  successProgram;
+		int  successProgram;
 		char infoLogProgram[512];
 		glGetProgramiv(program, GL_LINK_STATUS, &successProgram);
 		if (!successProgram)
@@ -138,12 +138,12 @@ namespace Simplex3D
 		glUniform1f(glGetUniformLocation(m_shader_program, name.c_str()), value);
 	}
 
-	void Shader::uniform1i(const std::string& name, I16 value) const
+	void Shader::uniform1i(const std::string& name, int value) const
 	{
 		glUniform1i(glGetUniformLocation(m_shader_program, name.c_str()), value);
 	}
 
-	void Shader::uniform1ui(const std::string& name, U16 value) const
+	void Shader::uniform1ui(const std::string& name, unsigned int value) const
 	{
 		glUniform1ui(glGetUniformLocation(m_shader_program, name.c_str()), value);
 	}
@@ -158,12 +158,12 @@ namespace Simplex3D
 		glUniform2f(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1);
 	}
 
-	void Shader::uniform2i(const std::string& name, I16 v0, I16 v1) const
+	void Shader::uniform2i(const std::string& name, int v0, int v1) const
 	{
 		glUniform2i(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1);
 	}
 
-	void Shader::uniform2ui(const std::string& name, U16 v0, U16 v1) const
+	void Shader::uniform2ui(const std::string& name, unsigned int v0, unsigned int v1) const
 	{
 		glUniform2ui(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1);
 	}
@@ -178,12 +178,12 @@ namespace Simplex3D
 		glUniform3f(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2);
 	}
 
-	void Shader::uniform3i(const std::string& name, I16 v0, I16 v1, I16 v2) const
+	void Shader::uniform3i(const std::string& name, int v0, int v1, int v2) const
 	{
 		glUniform3i(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2);
 	}
 
-	void Shader::uniform3ui(const std::string& name, U16 v0, U16 v1, U16 v2) const
+	void Shader::uniform3ui(const std::string& name, unsigned int v0, unsigned int v1, unsigned int v2) const
 	{
 		glUniform3ui(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2);
 	}
@@ -198,186 +198,186 @@ namespace Simplex3D
 		glUniform4f(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2, v3);
 	}
 
-	void Shader::uniform4i(const std::string& name, I16 v0, I16 v1, I16 v2, I16 v3) const
+	void Shader::uniform4i(const std::string& name, int v0, int v1, int v2, int v3) const
 	{
 		glUniform4i(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2, v3);
 	}
 
-	void Shader::uniform4ui(const std::string& name, U16 v0, U16 v1, U16 v2, U16 v3) const
+	void Shader::uniform4ui(const std::string& name, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3) const
 	{
 		glUniform4ui(glGetUniformLocation(m_shader_program, name.c_str()), v0, v1, v2, v3);
 	}
 	
 	//uniform vectors:
 
-	void Shader::uniform1dv(const std::string& name, I16 count, const double* value) const
+	void Shader::uniform1dv(const std::string& name, int count, const double* value) const
 	{
 		glUniform1dv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform1fv(const std::string& name, I16 count, const float* value) const
+	void Shader::uniform1fv(const std::string& name, int count, const float* value) const
 	{
 		glUniform1fv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform1iv(const std::string& name, I16 count, const I16* value) const
+	void Shader::uniform1iv(const std::string& name, int count, const int* value) const
 	{
 		glUniform1iv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform1uiv(const std::string& name, I16 count, const U16* value) const
+	void Shader::uniform1uiv(const std::string& name, int count, const unsigned int* value) const
 	{
 		glUniform1uiv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform2dv(const std::string& name, I16 count, const double* value) const
+	void Shader::uniform2dv(const std::string& name, int count, const double* value) const
 	{
 		glUniform2dv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform2fv(const std::string& name, I16 count, const float* value) const
+	void Shader::uniform2fv(const std::string& name, int count, const float* value) const
 	{
 		glUniform2fv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform2iv(const std::string& name, I16 count, const I16* value) const
+	void Shader::uniform2iv(const std::string& name, int count, const int* value) const
 	{
 		glUniform2iv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform2uiv(const std::string& name, I16 count, const U16* value) const
+	void Shader::uniform2uiv(const std::string& name, int count, const unsigned int* value) const
 	{
 		glUniform2uiv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform3dv(const std::string& name, I16 count, const double* value) const
+	void Shader::uniform3dv(const std::string& name, int count, const double* value) const
 	{
 		glUniform3dv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform3fv(const std::string& name, I16 count, const float* value) const
+	void Shader::uniform3fv(const std::string& name, int count, const float* value) const
 	{
 		glUniform3fv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform3iv(const std::string& name, I16 count, const I16* value) const
+	void Shader::uniform3iv(const std::string& name, int count, const int* value) const
 	{
 		glUniform3iv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform3uiv(const std::string& name, I16 count, const U16* value) const
+	void Shader::uniform3uiv(const std::string& name, int count, const unsigned int* value) const
 	{
 		glUniform3uiv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform4dv(const std::string& name, I16 count, const double* value) const
+	void Shader::uniform4dv(const std::string& name, int count, const double* value) const
 	{
 		glUniform4dv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform4fv(const std::string& name, I16 count, const float* value) const
+	void Shader::uniform4fv(const std::string& name, int count, const float* value) const
 	{
 		glUniform4fv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform4iv(const std::string& name, I16 count, const I16* value) const
+	void Shader::uniform4iv(const std::string& name, int count, const int* value) const
 	{
 		glUniform4iv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
-	void Shader::uniform4uiv(const std::string& name, I16 count, const U16* value) const
+	void Shader::uniform4uiv(const std::string& name, int count, const unsigned int* value) const
 	{
 		glUniform4uiv(glGetUniformLocation(m_shader_program, name.c_str()), count, value);
 	}
 
 	//uniform matrices:
 
-	void Shader::uniformMatrix2fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix2fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix2fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix3fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix3fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix4fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix4fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix2x3fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix2x3fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix2x3fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3x2fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix3x2fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix3x2fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix2x4fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix2x4fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix2x4fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4x2fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix4x2fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix4x2fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3x4fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix3x4fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix3x4fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4x3fv(const std::string& name, I16 count, bool transpose, const float* value)
+	void Shader::uniformMatrix4x3fv(const std::string& name, int count, bool transpose, const float* value)
 	{
 		glUniformMatrix4x3fv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix2dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix2dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix2dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix3dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix3dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix4dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix4dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix2x3dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix2x3dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix2x3dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3x2dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix3x2dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix3x2dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix2x4dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix2x4dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix2x4dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4x2dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix4x2dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix4x2dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix3x4dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix3x4dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix3x4dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
 
-	void Shader::uniformMatrix4x3dv(const std::string& name, I16 count, bool transpose, const double* value)
+	void Shader::uniformMatrix4x3dv(const std::string& name, int count, bool transpose, const double* value)
 	{
 		glUniformMatrix4x3dv(glGetUniformLocation(m_shader_program, name.c_str()), count, transpose, value);
 	}
@@ -386,15 +386,15 @@ namespace Simplex3D
 
 
 	/*
-	void glUniform4ui(	GLI16 location,
- 							GLuI16 v0,
- 							GLuI16 v1,
- 							GLuI16 v2,
- 							GLuI16 v3);
+	void glUniform4ui(	GLint location,
+ 							GLuint v0,
+ 							GLuint v1,
+ 							GLuint v2,
+ 							GLuint v3);
 
-	void glUniform4uiv(	GLI16 location,
+	void glUniform4uiv(	GLint location,
 						GLsizei count,
-						const GLuI16 *value);
+						const GLuint *value);
 	
 	*/
 

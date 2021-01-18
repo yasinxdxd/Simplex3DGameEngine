@@ -1,9 +1,10 @@
 #include "Terrain.hpp"
 #include "PerlinNoise.hpp"
-constexpr double X_ADD = 0.008;
-constexpr double Z_ADD = 0.008;
-const constexpr U16 WIDTH = 900;
-const constexpr U16 HEIGHT = 900;
+constexpr double X_ADD = 0.02;
+constexpr double Z_ADD = 0.02;
+constexpr double Y_HEIGHT = 20;
+const constexpr U16 WIDTH = 200;
+const constexpr U16 HEIGHT = 200;
 
 
 namespace Simplex3D
@@ -23,20 +24,16 @@ namespace Simplex3D
 
 		double y = 0;
 		
-		double kz = 0.008;
-		double kx = 0.008;
-		
-		
-		double xoffset = 189.0;
+		double xoffset = 77.0;
 		for (U16 x = 0; x < WIDTH; x++)
 		{
-			double zoffset = 456.0;
+			double zoffset = 12.0;
 			for (U16 z = 0; z < HEIGHT; z++)
 			{	
-				zoffset += kz;
+				zoffset += Z_ADD;
 				zOffsets[z] = zoffset;
 			}
-			xoffset += kx;
+			xoffset += X_ADD;
 			xOffsets[x] = xoffset;
 		}
 
@@ -49,27 +46,27 @@ namespace Simplex3D
 			for (U16 z = 1; z < HEIGHT-1; z++)
 			{
 				
-				y = mym::perlinNoise2D(xOffsets[x-1], zOffsets[z-1]) * 100;
+				y = mym::perlinNoise2D(xOffsets[x-1], zOffsets[z-1]) * Y_HEIGHT;
 				glm::vec3 a = { x, y + 100, z };
 
 				
-				y = mym::perlinNoise2D(xOffsets[x], zOffsets[z-1]) * 100;//l-u
+				y = mym::perlinNoise2D(xOffsets[x], zOffsets[z-1]) * Y_HEIGHT;//l-u
 				glm::vec3 b = { x + 1, y + 100, z };
 
 				
-				y = mym::perlinNoise2D(xOffsets[x-1], zOffsets[z]) * 100;//r-u		
+				y = mym::perlinNoise2D(xOffsets[x-1], zOffsets[z]) * Y_HEIGHT;//r-u		
 				glm::vec3 c = { x, y + 100, z + 1 };
 
 				
-				y = mym::perlinNoise2D(xOffsets[x], zOffsets[z]) * 100;//r-u		
+				y = mym::perlinNoise2D(xOffsets[x], zOffsets[z]) * Y_HEIGHT;//r-u		
 				glm::vec3 d = { x + 1, y + 100, z + 1 };
 				
-				Vertex v1(a, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });
-				Vertex v2(b, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });
-				Vertex v3(c, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });
-				Vertex v4(b, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });//c1 - b1, d - b1
-				Vertex v5(c, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });//c - b, d - b
-				Vertex v6(d, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76, 0.69, 0.5, 1 });
+				Vertex v1(a, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });
+				Vertex v2(b, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });
+				Vertex v3(c, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });
+				Vertex v4(b, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });//c1 - b1, d - b1
+				Vertex v5(c, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });//c - b, d - b
+				Vertex v6(d, { 0,0 }, glm::normalize(glm::cross(b - a, c - a)), { 0.76 + y / 100, 0.69, 0.5, 1 });
 				vertices.push_back(v1);
 				vertices.push_back(v2);
 				vertices.push_back(v3);	//l-d
@@ -81,13 +78,7 @@ namespace Simplex3D
 			}
 		}
 
-
-
-
-
-
-
-
+	
 		m_meshes.push_back(new Mesh(vertices, indices));
 	}
 

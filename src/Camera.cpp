@@ -48,12 +48,12 @@ namespace Simplex3D
 			position -= camera_speed * up_axis;
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		{
-			camera_speed = 16.f; 
+			camera_speed = 80.f; 
 			rotate_speed = 1;
 		}
 		else
 		{
-			camera_speed = 8.f;
+			camera_speed = 0.6;
 			rotate_speed = 0.3;
 		}
 		

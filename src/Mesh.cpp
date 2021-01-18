@@ -8,7 +8,7 @@
 namespace Simplex3D
 {
 
-	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<U16> indices):
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices):
 		m_vertices(vertices), m_indices(indices)
 	{
 		//generate VAO:
@@ -68,7 +68,7 @@ namespace Simplex3D
 		//data:
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Simplex3D::Vertex), m_vertices.data(), GL_STATIC_DRAW);//GL_STATIC_DRAW //GL_DYNAMIC_DRAW
 		//data:
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(U16), m_indices.data(), GL_STATIC_DRAW);
 
 
 		//position attribute:
@@ -95,7 +95,7 @@ namespace Simplex3D
 		return m_vertices;
 	}
 
-	void Mesh::draw(Window& window, Camera cam, glm::mat4 model, Shader& shader)
+	void Mesh::draw(Window& window, Camera cam, glm::mat4 model, Shader& shader, glm::vec3 light_pos)
 	{
 		glm::mat4 m_model = glm::mat4(1.0f);
 		glm::mat4 m_view = glm::mat4(1.0f);
@@ -108,7 +108,7 @@ namespace Simplex3D
 		
 
 		//projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 1000000.0f);
+		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 1.5f, 1500000.0f);
 		m_view = cam.view;
 		m_model = model;
 
@@ -125,7 +125,7 @@ namespace Simplex3D
 
 		//lightning
 		shader.use();
-		shader.uniform3f("light_position", -100, 60, -12);
+		shader.uniform3f("light_position", light_pos.x, light_pos.y, light_pos.z);
 		shader.uniform3fv("view_position", 1, glm::value_ptr(cam.position));
 		bind();
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Simplex3D::Vertex), (void*)offsetof(Simplex3D::Vertex, Simplex3D::Vertex::normal));
