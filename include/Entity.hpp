@@ -8,7 +8,7 @@ namespace Simplex3D
 
 	class Entity
 	{
-	protected:
+	public:
 		Entity();
 		virtual ~Entity();
 
@@ -46,7 +46,7 @@ namespace Simplex3D
 		std::vector<Simplex3D::Mesh*> getMeshes() const;
 
 	public:
-		virtual void drawMeshes(Window& window, Camera cam);
+		virtual void drawMeshes(Window& window, Camera cam, glm::vec3 light_pos);
 
 
 
@@ -58,6 +58,8 @@ namespace Simplex3D
 		VertexArray vertices;
 		IndexArray indices;
 
+
+	//friend ComponentList;
 	};
 
 

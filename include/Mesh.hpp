@@ -1,7 +1,7 @@
 #ifndef SIMPLEX3D_MESH_HPP
 #define SIMPLEX3D_MESH_HPP
 
-#include "Definations.hpp"
+#include "Definitions.hpp"
 #include "Vertex.hpp"
 #include "Renderable.hpp"
 #include <vector>
@@ -12,30 +12,30 @@ namespace Simplex3D
 	class Mesh : public Renderable
 	{
 	public:
-		Mesh(std::vector<Vertex> vertices, std::vector<U16> indices);
+		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 		~Mesh();
-	public:
+
+	private:
 		void bind();
 		void unBind();
 
+	public:
 		void setupMesh();
 		
 		std::vector<Simplex3D::Vertex> getVertices() const;
 		
-		virtual void draw(Window& window, Camera cam, glm::mat4 model, Shader& shader) override;
+		virtual void draw(Window& window, Camera cam, glm::mat4 model, Shader& shader, glm::vec3 light_pos) override;
 
 	private:
-		U16 VAO, VBO, EBO;
+		unsigned int VAO, VBO, EBO;
 		float a = 0;
-		std::vector<unsigned int> m_indices;
-		std::vector<Simplex3D::Vertex> m_vertices;
+		IndexArray m_indices;
+		VertexArray m_vertices;
 		//std::vector<Simplex3D::Texture> m_textures;
 
 	};
 
 }
 
-typedef std::vector<Simplex3D::Vertex> VertexArray;
-typedef std::vector<unsigned int> IndexArray;
 
 #endif //SIMPLEX3D_MESH_HPP

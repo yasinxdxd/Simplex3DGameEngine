@@ -11,6 +11,8 @@ namespace Simplex3D
 	public:
 		Light();
 		~Light();
+
+		//virtual void drawMeshes(Window& window, Camera cam) override;
 	};
 
 }

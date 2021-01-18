@@ -5,7 +5,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Definations.hpp"
+#include "Definitions.hpp"
 #include "glm/vec4.hpp"
 
 namespace Simplex3D

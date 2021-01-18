@@ -11,7 +11,7 @@ namespace Simplex3D
 	class Renderable
 	{
 	protected:
-		virtual void draw(Window& window, Camera cam, glm::mat4 model, Shader& shader) = 0;
+		virtual void draw(Window& window, Camera cam, glm::mat4 model, Shader& shader, glm::vec3 light_pos) = 0;
 	};
 
 }

@@ -11,16 +11,16 @@
 namespace mym
 {
     ///Main Vec Class
-    template<const unsigned int _D, typename _T>
+    template<const U16 _D, typename _T>
     class Vec
     {
     public:
         Vec();
         virtual ~Vec();
 
-        virtual _T& operator[](const unsigned int index) = 0;
+        virtual _T& operator[](const U16 index) = 0;
 
-        template<const unsigned int _I, typename _U>
+        template<const U16 _I, typename _U>
         friend std::ostream& operator<<(std::ostream& os, Vec<_I, _U> vec);
 
     protected:
@@ -36,7 +36,7 @@ namespace mym
         Vec2() = default;
         Vec2(_T _x, _T _y = 0);
 
-        virtual _T& operator[](const unsigned int index) override;
+        virtual _T& operator[](const U16 index) override;
 
         template<typename _U>
         constexpr _T operator*(const Vec2<_U>& v) const noexcept;
@@ -53,7 +53,7 @@ namespace mym
         Vec3() = default;
         Vec3(_T _x, _T _y = 0, _T _z = 0);
 
-        virtual _T& operator[](const unsigned int index) override;
+        virtual _T& operator[](const U16 index) override;
         constexpr _T operator*(const Vec3<_T>& v) const noexcept;
 
     public:
@@ -68,7 +68,7 @@ namespace mym
         Vec4() = default;
         Vec4(_T _x, _T _y = 0, _T _z = 0, _T _w = 0);
 
-        virtual _T& operator[](const unsigned int index) override;
+        virtual _T& operator[](const U16 index) override;
         constexpr _T operator*(const Vec4<_T>& v) const noexcept;
 
     public:
@@ -82,23 +82,23 @@ namespace mym
 ///---IMPLEMENTATION---///
 namespace mym
 {
-    template<const unsigned int _D, typename _T>
+    template<const U16 _D, typename _T>
     Vec<_D, _T>::Vec()
     {
-        for(unsigned int i = 0; i < _D; i++)
+        for(U16 i = 0; i < _D; i++)
             this->data[i] = static_cast<_T>(0);
     }
 
-    template<const unsigned int _D, typename _T>
+    template<const U16 _D, typename _T>
     Vec<_D, _T>::~Vec()
     {
         //dtor
     }
 
-    template<const unsigned int _D, typename _T>
+    template<const U16 _D, typename _T>
     std::ostream& operator<<(std::ostream& os, Vec<_D, _T> vec)
     {
-        for(unsigned int i = 0; i < _D; i++)
+        for(U16 i = 0; i < _D; i++)
         {
             os << vec[i];
             if(i != _D-1)
@@ -116,7 +116,7 @@ namespace mym
     { }
 
     template<typename _T>
-    _T& Vec2<_T>::operator[](const unsigned int index)
+    _T& Vec2<_T>::operator[](const U16 index)
     {
         this->data[0] = x;
         this->data[1] = y;
@@ -136,7 +136,7 @@ namespace mym
     { }
 
     template<typename _T>
-    _T& Vec3<_T>::operator[](const unsigned int index)
+    _T& Vec3<_T>::operator[](const U16 index)
     {
         this->data[0] = x;
         this->data[1] = y;
@@ -157,7 +157,7 @@ namespace mym
     { }
 
     template<typename _T>
-    _T& Vec4<_T>::operator[](const unsigned int index)
+    _T& Vec4<_T>::operator[](const U16 index)
     {
         this->data[0] = x;
         this->data[1] = y;
@@ -177,17 +177,17 @@ namespace mym
 
 
 typedef Vec2<int>           Vec2i;
-typedef Vec2<unsigned int>  Vec2ui;
+typedef Vec2<U16>  Vec2ui;
 typedef Vec2<double>        Vec2d;
 typedef Vec2<float>         Vec2f;
 
 typedef Vec3<int>           Vec3i;
-typedef Vec3<unsigned int>  Vec3ui;
+typedef Vec3<U16>  Vec3ui;
 typedef Vec3<double>        Vec3d;
 typedef Vec3<float>         Vec3f;
 
 typedef Vec4<int>           Vec4i;
-typedef Vec4<unsigned int>  Vec4ui;
+typedef Vec4<U16>  Vec4ui;
 typedef Vec4<double>        Vec4d;
 typedef Vec4<float>         Vec4f;
 

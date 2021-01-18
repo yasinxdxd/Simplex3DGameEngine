@@ -26,6 +26,7 @@ namespace Simplex3D
 		
 	public:
 		ComponentList componentList;
+		MenuBar menuBar;
 		
 
 	};

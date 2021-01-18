@@ -5,7 +5,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "Definations.hpp"
+//#include <memory>
+
+#include "Definitions.hpp"
 #include "Entity.hpp"
 
 namespace Simplex3D
@@ -31,15 +33,27 @@ namespace Simplex3D
 
 	};
 
+	struct ColorPicker : GUI
+	{
+		ColorPicker();
+		~ColorPicker();
+
+		float color[3];
+
+		virtual void render() override;
+		void update(Entity*& entitiy);
+	};
+
 	struct EntityGUI
 	{
-		//EntityGUI() { transform = new Transform(); }
-		//~EntityGUI() { delete transform; }
+		EntityGUI();
+		~EntityGUI();
 
 		bool selected;
 		std::string name;
 		Entity* entity;
 		Transform transform;
+		ColorPicker colorPicker;
 	};
 	/**
 	TO-DO: don't forget to use update func of transform.
@@ -56,9 +70,18 @@ namespace Simplex3D
 
 	public://private:
 		std::vector<EntityGUI*> entityGUIs;
-
+		bool menu1, menu2;
 		//friend Transform;
 	};
+
+
+	struct MenuBar : GUI
+	{
+		MenuBar();
+		~MenuBar();
+		virtual void render() override;
+	};
+
 }
 
 
