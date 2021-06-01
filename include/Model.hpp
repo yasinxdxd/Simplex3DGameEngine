@@ -17,12 +17,12 @@ namespace Simplex3D
 		Model(const char* file_path);
 		~Model();
 	private:
-		Simplex3D::Mesh* processMesh(const aiMesh* mesh, const aiScene* scene);
+		/*std::unique_ptr<Mesh>*/Mesh* processMesh(const aiMesh* mesh, const aiScene* scene);
 		void recursiveProcess(aiNode* node, const aiScene* scene);
 
 	public:
-
-		
+		bool loadModelSTL(const char* file_path);
+		bool loadModelOBJ(const char* file_path);
 		bool loadModel(const char* file_path);
 		
 	private:

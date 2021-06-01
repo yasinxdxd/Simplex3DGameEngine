@@ -13,8 +13,8 @@ namespace Simplex3D
 		~Terrain();
 	public:
 		void setHigh();
-		void setFrequency();
-
+		void setFrequency(glm::fvec2);
+		void generate();
 
 
 	};

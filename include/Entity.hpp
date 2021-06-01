@@ -2,6 +2,7 @@
 #define ENTITY_HPP
 
 #include "Mesh.hpp"
+#include <memory>
 
 namespace Simplex3D
 {
@@ -21,6 +22,8 @@ namespace Simplex3D
 		virtual void setRotation(float angle, glm::vec3);
 		virtual void setScale(glm::vec3);
 		virtual void setColor(glm::vec4);
+		
+		virtual void setTexture(Texture2D& texture);
 
 		virtual void setRotateX(float angle);
 		virtual void setRotateY(float angle);
@@ -43,7 +46,7 @@ namespace Simplex3D
 		virtual float getScaleY() const;
 		virtual float getScaleZ() const;
 
-		std::vector<Simplex3D::Mesh*> getMeshes() const;
+		std::vector<Shared<Simplex3D::Mesh>> getMeshes() const;
 
 	public:
 		virtual void drawMeshes(Window& window, Camera cam, glm::vec3 light_pos);
@@ -52,7 +55,7 @@ namespace Simplex3D
 
 	protected:
 		glm::mat4 m_model_matrix;
-		std::vector<Simplex3D::Mesh*> m_meshes;
+		std::vector<Shared<Simplex3D::Mesh>> m_meshes;
 		Shader m_shader;
 
 		VertexArray vertices;

@@ -1,8 +1,6 @@
 #ifndef TEXTURE_2D_HPP
 #define TEXTURE_2D_HPP
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "Definitions.hpp"
 
 namespace Simplex3D
@@ -12,14 +10,17 @@ namespace Simplex3D
 	{
 	public:
 		explicit Texture2D();
-		explicit Texture2D(const char* file_path);
+		explicit Texture2D(const char*);
+		~Texture2D();
 
 	public:
+		operator unsigned int() const noexcept;
 		bool loadFromFile(const char*);
-		//bool loadFrom;
 	
 	private:
-		U16 m_texture;
+		int m_width, m_height, m_nr_channels;
+		unsigned char* m_data;
+		U32 m_texture;
 	};
 
 }

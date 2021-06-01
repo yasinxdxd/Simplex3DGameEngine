@@ -9,6 +9,7 @@
 namespace Simplex3D
 {
 	struct Vertex;
+	class Entity;
 
 	class Utils
 	{
@@ -20,6 +21,7 @@ namespace Simplex3D
 		static std::vector<Vertex> loadOBJ2(const char* file_name);
 		static void loadOBJEBO(const char* file_path, std::vector<Vertex>& _vertices, std::vector<unsigned int>& _indices);
 		static glm::vec3 readGyroscope(const char* file_path);
+		static void rayCastingMouse(Entity& entity);
 	};
 }
 

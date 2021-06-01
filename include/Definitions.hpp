@@ -49,6 +49,13 @@ typedef std::vector<Simplex3D::Vertex> VertexArray;
 typedef std::vector<unsigned int> IndexArray;
 
 
+#include <memory>
+template<typename _Ptr>
+using Unique = std::unique_ptr<_Ptr>;
+template<typename _Ptr>
+using Shared = std::shared_ptr<_Ptr>;
+
+
 
 #endif //SIMPLEX3D_DEFINATIONS_HPP
 

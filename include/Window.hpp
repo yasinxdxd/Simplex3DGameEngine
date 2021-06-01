@@ -21,6 +21,7 @@ namespace Simplex3D
 		//Setters:
 		void setColor(short r, short g, short b);
 		void setWindowClose(bool value);
+		void setFullScreen(bool full);
 
 		//Getters:
 		U16 getWidth() const;

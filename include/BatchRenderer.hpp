@@ -11,13 +11,16 @@
 
 namespace Simplex3D
 {
+	class Camera;
+	class Window;
+
 	struct BatchVertex
 	{
 		BatchVertex(glm::vec3 _position = { 0, 0, 0 },
 					glm::vec2 _texcoord = { 0, 0 },
 					glm::vec3 _normal = { 0, 0, 0 },
 					glm::vec4 _color = { 1, 1, 1, 1 },
-					float _texID = 0):
+					U32 _texID = 0):
 					position(_position), texcoord(_texcoord), normal(_normal), color(_color), textureID(_texID)
 					{ }
 		glm::vec3 position;
@@ -37,7 +40,7 @@ namespace Simplex3D
 		BatchRenderer();
 		~BatchRenderer();
 	public:
-		void draw();
+		void draw(Window& window, Camera cam, glm::mat4 model, glm::vec3 light_pos);
 	private:
 		void setVertices();
 		void setIndices();

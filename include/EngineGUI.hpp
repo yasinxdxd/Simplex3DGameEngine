@@ -22,6 +22,7 @@ namespace Simplex3D
 
 
 	private:
+		void GUIStyle();
 		static EngineGUI* m_instance;
 		
 	public:
