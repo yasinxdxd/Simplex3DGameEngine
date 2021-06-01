@@ -1,5 +1,7 @@
 #include "Window.hpp"
 #include "WindowEvent.hpp"
+#include "Mouse.hpp"
+#include "Log.hh"
 #include <thread>
 #include <sstream>
 
@@ -27,13 +29,15 @@ namespace Simplex3D
 		//glfw init:
 		if (!glfwInit())
 		{
-			std::cerr << "glfw couldn't initialize!" << std::endl;
+			log("glfw couldn't initialize!");
+			//std::cerr << "glfw couldn't initialize!" << std::endl;
 			return false;
 		}
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
 		if(m_fullscreen)
 			m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), glfwGetPrimaryMonitor(), NULL);
@@ -74,12 +78,26 @@ namespace Simplex3D
 		m_color.r = (float)r/255;
 		m_color.g = (float)g/255;
 		m_color.b = (float)b/255;
-		m_color.a = (float)1;
+		m_color.a = (float)1.0;
 	}
 
 	void Window::setWindowClose(bool value)
 	{
 		m_is_open = !value;
+	}
+
+	void Window::setFullScreen(bool full)
+	{
+		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		
+		m_fullscreen = true;
+		m_width = mode->width;
+		m_height = mode->height;
+
+
+		glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), 0, 0, m_width, m_height, mode->refreshRate);
+		glViewport(0, 0, m_width, m_height);
+
 	}
 
 	//Getters:
@@ -111,9 +129,11 @@ namespace Simplex3D
 		glfwSetFramebufferSizeCallback(m_window, WindowEvent::framebuffer_size_callback);
 		glfwSetWindowSizeCallback(m_window, WindowEvent::window_size_callback);
 		glfwSetKeyCallback(m_window, WindowEvent::Keyboard::key_callback);
+		glfwSetCursorPosCallback(m_window, Mouse::cursor_position_callback);
+		glfwGetCursorPos(m_window, &Mouse::m_position.x, &Mouse::m_position.y);
 		
 		std::stringstream ss;
-		ss << "Simplex3D" << " " << "0.01" << " [" << float(m_delay) << " FPS]";
+		ss << "Simplex3D" << " " << Mouse::getPosition().x << "," << Mouse::getPosition().y;//"0.01" << " [" << float(m_delay) << " FPS]";
 
 		glfwSetWindowTitle(m_window, ss.str().c_str());
 

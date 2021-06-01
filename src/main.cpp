@@ -3,8 +3,6 @@
 #include "Shader.hpp"
 #include "WindowEvent.hpp"
 #include "Utils.hpp"
-#include <exception>
-#include <vector>
 #include "Mesh.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
@@ -12,56 +10,124 @@
 #include "Terrain.hpp"
 #include "EngineGUI.hpp"
 #include "BatchRenderer.hpp"
+#include "Texture2D.hpp"
+#include "CubeMap.hpp"
+#include "LOD.hpp"
+#include "Log.hh"
 
 
-
-//#include <thread>
+#include <exception>
+#include <array>
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-//#include <windows.h>
 
 
 
-int main(int argc, char** argv)
+
+int main(int argc, char* argv[])
 {
-	Simplex3D::Window myWindow(1920, 1080, "Simplex3D");
-	myWindow.setColor(69, 81, 161);
+    printf("argc ======= %d", argc);
+    Simplex3D::Window myWindow(1080, 720, "Simplex3D");
+    if (argc > 1)
+    {
+        if (strcmp(argv[1], "!fullscreen") == 0)   //C style :)
+        {
+            myWindow.setFullScreen(true);
+            
+        }
+    }
+	myWindow.setColor(200,200,200);
     Simplex3D::EngineGUI::getInstace()->Init(myWindow);
 
-
-    //batch
-    Simplex3D::BatchRenderer batcRenderer;
-    //
+    ///////////////////////////////////////CUBE MAP/////////////////////////////////////////////
+    /**/Simplex3D::Shader cubeMapShader;
+    /**/cubeMapShader.loadShader("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/glsl/CubeMapV.glsl", "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/glsl/CubeMapF.glsl");
+    /**/cubeMapShader.attachShader();
+    /**/
+    /**/const char* paths[6] = { "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_left.png",
+                                "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_right.png",
+                                "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_top.png" ,
+                                "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_bottom.png" ,
+                                "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_front.png" ,
+                                "C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/textures/space/SpaceboxCollection/Spacebox1/_back.png" };
+    /**/
+    /**/
+    /**/
+    /**/Simplex3D::CubeMap cubeMap1;
+    /**/cubeMap1.loadFromFile(paths);
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 	Simplex3D::Camera cam;
 
-    Simplex3D::Model suit("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/Nanosuit.obj");
-    Simplex3D::Model cow("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/cow.obj");
-    Simplex3D::Model coord("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/coord.obj");
-    Simplex3D::Model shipModel("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/ship_dark.obj");
-	Simplex3D::Model pirate("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/pirate_officer.obj");
-	Simplex3D::Model tower("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/tower.obj");
-	Simplex3D::Model chest("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/chest.obj");
-    //Simplex3D::Model palm("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/OBJ format/palm_short.obj");
-    //Simplex3D::Model teapot("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/teapot.obj");
+    Simplex3D::Texture2D texture_sun("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_sun.jpg");
+    Simplex3D::Texture2D texture_venus("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_venus_surface.jpg");
+    Simplex3D::Texture2D texture_jupiter("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_jupiter.jpg");
+    Simplex3D::Texture2D texture_mars("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_mars.jpg");
+    Simplex3D::Texture2D texture_mercury("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_mercury.jpg");
+    Simplex3D::Texture2D texture_neptune("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_neptune.jpg");
+    Simplex3D::Texture2D texture_saturn("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_saturn.jpg");
+    Simplex3D::Texture2D texture_uranus("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\back.jpg");
+    Simplex3D::Texture2D texture_earth("C:\\Users\\Lenovo\\Desktop\\freelance\\opengl solar system\\2k_earth_daymap.jpg");
+
+
+    
     Simplex3D::Light light;
-    Simplex3D::Terrain terrain;
+
+
+    Simplex3D::Model model_sun;
+    Simplex3D::Model model_venus;
+    Simplex3D::Model model_jupiter;
+    Simplex3D::Model model_mars;
+    Simplex3D::Model model_mercury;
+    Simplex3D::Model model_neptune;
+    Simplex3D::Model model_saturn;
+    Simplex3D::Model model_uranus;
+    Simplex3D::Model model_earth;
+
+    model_sun.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_venus.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_jupiter.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_mars.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_mercury.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_neptune.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_saturn.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_uranus.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+    model_earth.loadModelOBJ("C:/Users/Lenovo/Desktop/Coding/3DSolution/3DGameEngine/resources/3D/sphere.obj");
+
+
+
+    model_sun.setTexture(texture_sun);
+    model_venus.setTexture(texture_venus);
+    model_jupiter.setTexture(texture_jupiter);
+    model_mars.setTexture(texture_mars);
+    model_mercury.setTexture(texture_mercury);
+    model_neptune.setTexture(texture_neptune);
+    model_saturn.setTexture(texture_saturn);
+    model_uranus.setTexture(texture_uranus);
+    model_earth.setTexture(texture_earth);
     
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(suit, "crysisGuy");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(cow, "inek");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(coord, "coord");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(shipModel, "shipModel");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(pirate, "pirate");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(tower, "tower");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(chest, "chest");
-    //Simplex3D::EngineGUI::getInstace()->componentList.addEntity(palm);
-    //Simplex3D::EngineGUI::getInstace()->componentList.addEntity(teapot);
+
     Simplex3D::EngineGUI::getInstace()->componentList.addEntity(light, "light");
-    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(terrain, "terrain");
-    
+
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_sun, "sun");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_venus, "venus,");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_jupiter, "jupiter");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_mars, "mars");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_mercury, "mercury");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_neptune, "neptune");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_saturn, "saturn");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_uranus, "uranus");
+    Simplex3D::EngineGUI::getInstace()->componentList.addEntity(model_earth, "earth");
+
+
+
+
+
+
     //std::vector<Simplex3D::Entity*> e;
 
     //e.push_back(shipModel);
@@ -101,10 +167,9 @@ int main(int argc, char** argv)
         cam.roll = angles.z;
     }
     
-    
-    //glEnable(GL_LIGHT);
+    log("hey");
 
-	float a = 0;
+	float a = 0.01;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	while (myWindow.isOpen())
@@ -237,12 +302,14 @@ int main(int argc, char** argv)
 
         Simplex3D::EngineGUI::getInstace()->update();
 		//DRAW:
-		myWindow.clear();
+        myWindow.clear();
+        cubeMap1.draw(myWindow, cam, glm::mat4(1), cubeMapShader, glm::vec3());
+
         
         for(U16 i = 0; i < Simplex3D::EngineGUI::getInstace()->componentList.entityGUIs.size(); i++)
             Simplex3D::EngineGUI::getInstace()->componentList.entityGUIs[i]->entity->drawMeshes(myWindow, cam, light.getPosition());
 		
-        //batcRenderer.draw();
+        //batcRenderer.draw(myWindow, cam, glm::mat4(1.0f), light.getPosition());
 
         Simplex3D::EngineGUI::getInstace()->render();
 		myWindow.display();

@@ -1,5 +1,7 @@
 #include "Model.hpp"
 #include <iostream>
+#include <stl_loader.h>
+#include "Log.hh"
 
 namespace Simplex3D
 {
@@ -22,6 +24,230 @@ namespace Simplex3D
 	}
 
 
+	bool Model::loadModelSTL(const char* file_path)
+	{
+		STL_HEADER stl_header;
+		STL_TRIANGLE* triangles;
+		attribute_byte_count* attributes;
+
+		if (!stl_load_from_file(file_path, stl_header, triangles, attributes))
+		{
+			log("model cannot loaded!");
+			return false;
+		}
+
+		Simplex3D::Vertex vertex1;
+		Simplex3D::Vertex vertex2;
+		Simplex3D::Vertex vertex3;
+		
+		for (U32 i = 0; i < stl_header.triangles_number; i++)
+		{
+			//position
+			vertex1.position.x = triangles[i].vertex1[0];
+			vertex1.position.y = triangles[i].vertex1[1];
+			vertex1.position.z = triangles[i].vertex1[2];
+			vertex2.position.x = triangles[i].vertex2[0];
+			vertex2.position.y = triangles[i].vertex2[1];
+			vertex2.position.z = triangles[i].vertex2[2];
+			vertex3.position.x = triangles[i].vertex3[0];
+			vertex3.position.y = triangles[i].vertex3[1];
+			vertex3.position.z = triangles[i].vertex3[2];
+
+			//normals:
+			vertex1.normal.x = triangles[i].normal_vector[0];
+			vertex1.normal.y = triangles[i].normal_vector[1];
+			vertex1.normal.z = triangles[i].normal_vector[2];
+			vertex2.normal.x = triangles[i].normal_vector[0];
+			vertex2.normal.y = triangles[i].normal_vector[1];
+			vertex2.normal.z = triangles[i].normal_vector[2];
+			vertex3.normal.x = triangles[i].normal_vector[0];
+			vertex3.normal.y = triangles[i].normal_vector[1];
+			vertex3.normal.z = triangles[i].normal_vector[2];
+
+			//push:
+			vertices.push_back(vertex1);
+			vertices.push_back(vertex2);
+			vertices.push_back(vertex3);
+		}
+
+		/*free memory*/
+		stl_free<STL_TRIANGLE>(triangles);
+		stl_free<attribute_byte_count>(attributes);
+
+		if(triangles)
+			log("MEMORY LEAAAAK!");
+		if (attributes)
+			log("MEMORY LEAAAAK! att");
+
+		m_meshes.push_back(std::make_unique<Mesh>(vertices, indices));
+
+		return true;
+	}
+
+	bool Model::loadModelOBJ(const char* file_path)
+	{
+		
+		//std::vector<Vertex> vertices;
+		vertices.clear();
+
+		//v,vn,vt values of the .obj files
+		std::vector<glm::vec3> position_vertices;
+		std::vector<glm::vec2> textcoord_vertices;
+		std::vector<glm::vec3> normal_vertices;
+
+		//f values of the .obj files
+		std::vector<unsigned int> position_vertices_indices;
+		std::vector<unsigned int> textcoord_vertices_indices;
+		std::vector<unsigned int> normal_vertices_indices;
+
+		//reading
+		std::stringstream ss;
+		std::string line = "";
+		std::string prefix = "";
+		std::fstream file(file_path);
+
+		//temps
+		glm::vec3 temp_vec3;
+		glm::vec2 temp_vec2;
+		unsigned int temp_int;
+
+
+		//error check
+		if (!file.is_open())
+			std::cerr << "file couldn't opened!" << std::endl;
+
+		while (std::getline(file, line))
+		{
+			ss.clear();
+			ss.str(line);
+			ss >> prefix;
+
+			if (prefix == "#" || prefix == "o" || prefix == "s" || prefix == "g")
+				continue;
+			else if (prefix == "v")
+			{
+				ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+				position_vertices.push_back(temp_vec3);
+			}
+			else if (prefix == "vt")
+			{
+				ss >> temp_vec2.x >> temp_vec2.y;
+				textcoord_vertices.push_back(temp_vec2);
+			}
+			else if (prefix == "vn")
+			{
+				ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+				normal_vertices.push_back(temp_vec3);
+			}
+			else if (prefix == "f")
+			{
+				unsigned int counter = 0;
+				while (ss >> temp_int)
+				{
+					if (counter == 0)
+						position_vertices_indices.push_back(temp_int);
+					else if (counter == 1)
+						textcoord_vertices_indices.push_back(temp_int);
+					else if (counter == 2)
+						normal_vertices_indices.push_back(temp_int);
+
+					if (ss.peek() == '/')
+					{
+						++counter;
+						ss.ignore(1, '/');
+					}
+					if (ss.peek() == ' ')
+					{
+						++counter;
+						ss.ignore(1, ' ');
+					}
+
+					if (counter > 2)
+						counter = 0;
+				}
+
+			}
+			else
+				continue;
+
+		}
+		file.close();
+
+		std::cout << position_vertices.size() << std::endl;
+		std::cout << textcoord_vertices.size() << std::endl;
+		std::cout << normal_vertices.size() << std::endl;
+
+		std::cout << position_vertices_indices.size() << std::endl;
+		std::cout << textcoord_vertices_indices.size() << std::endl;
+		std::cout << normal_vertices_indices.size() << std::endl;
+
+		vertices.resize(position_vertices_indices.size(), Vertex());
+
+		//setting values of vertex and pushing the vertex in result vertices 
+		if ((textcoord_vertices_indices.size() == 0 || textcoord_vertices.size() == 0) &&
+			normal_vertices_indices.size() == 0 || normal_vertices.size() == 0)
+		{
+			for (unsigned int i = 0; i < position_vertices_indices.size(); i++)
+			{
+				Vertex temp;
+
+				temp.position = position_vertices[fabs(position_vertices_indices[i]) - 1];
+				//temp.texcoord = textcoord_vertices[fabs(textcoord_vertices_indices[i]) - 1];
+				//temp.normal = normal_vertices[fabs(normal_vertices_indices[i]) - 1];
+				temp.color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+
+				vertices.push_back(temp);
+			}
+		}
+		else if (textcoord_vertices_indices.size() == 0 || textcoord_vertices.size() == 0)
+		{
+			for (unsigned int i = 0; i < position_vertices_indices.size(); i++)
+			{
+				Vertex temp;
+
+				temp.position = position_vertices[fabs(position_vertices_indices[i]) - 1];
+				//temp.texcoord = textcoord_vertices[fabs(textcoord_vertices_indices[i]) - 1];
+				temp.normal = normal_vertices[fabs(normal_vertices_indices[i]) - 1];
+				temp.color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+
+				vertices.push_back(temp);
+			}
+		}
+		else if (normal_vertices_indices.size() == 0 || normal_vertices.size() == 0)
+		{
+			for (unsigned int i = 0; i < position_vertices_indices.size(); i++)
+			{
+				Vertex temp;
+
+				temp.position = position_vertices[fabs(position_vertices_indices[i]) - 1];
+				temp.texcoord = textcoord_vertices[fabs(textcoord_vertices_indices[i]) - 1];
+				//temp.normal = normal_vertices[fabs(normal_vertices_indices[i]) - 1];
+				temp.color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+
+				vertices.push_back(temp);
+			}
+		}
+		else
+		{
+			for (unsigned int i = 0; i < position_vertices_indices.size(); i++)
+			{
+				Vertex temp;
+
+				temp.position = position_vertices[fabs(position_vertices_indices[i]) - 1];
+				temp.texcoord = textcoord_vertices[fabs(textcoord_vertices_indices[i]) - 1];
+				temp.normal = normal_vertices[fabs(normal_vertices_indices[i]) - 1];
+				temp.color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+
+				vertices.push_back(temp);
+			}
+		}
+
+		
+		m_meshes.push_back(std::make_unique<Mesh>(vertices, indices));
+
+		return true;
+	}
+
 	bool Model::loadModel(const char* file_path)
 	{
 		//aiProcess_GenSmoothNormals
@@ -43,13 +269,13 @@ namespace Simplex3D
 		return true;
 	}
 
-	Simplex3D::Mesh* Model::processMesh(const aiMesh* mesh, const aiScene* scene)
+	/*std::unique_ptr<Mesh>*/ Mesh* Model::processMesh(const aiMesh* mesh, const aiScene* scene)
 	{
 	
 		//std::vector<Texture> textures;
 
 		//PROCESS VERTICES
-		for (U16 i = 0; i < mesh->mNumVertices; i++)
+		for (U32 i = 0; i < mesh->mNumVertices; i++)
 		{
 			Simplex3D::Vertex vertex;
 
@@ -99,8 +325,8 @@ namespace Simplex3D
 
 		}
 		
-		
-		return new Simplex3D::Mesh(vertices, indices);
+		return new Mesh(vertices, indices);
+		//return std::make_unique<Simplex3D::Mesh>(vertices, indices);
 	}
 
 	void Model::recursiveProcess(aiNode* node, const aiScene* scene)
@@ -109,7 +335,7 @@ namespace Simplex3D
 		for (U16 i = 0; i < node->mNumMeshes; i++)
 		{
 			const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			m_meshes.push_back(processMesh(mesh, scene));
+			m_meshes.push_back(Shared<Mesh>(processMesh(mesh, scene)));
 		}
 
 		//recursion

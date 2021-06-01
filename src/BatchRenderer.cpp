@@ -3,6 +3,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "Camera.hpp"
+#include "Window.hpp"
+
+
 namespace Simplex3D
 {
 
@@ -52,7 +56,7 @@ namespace Simplex3D
 		glDeleteBuffers(1, &EBO);
 	}
 
-	void BatchRenderer::draw()
+	void BatchRenderer::draw(Window& window, Camera cam, glm::mat4 model, glm::vec3 light_pos)
 	{
 		glm::mat4 m_model = glm::mat4(1.0f);
 		glm::mat4 m_view = glm::mat4(1.0f);
@@ -65,9 +69,9 @@ namespace Simplex3D
 
 
 		//projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-		m_projection = glm::perspective(glm::radians(45.f), (float)1920 / (float)1080, 1.5f, 1500000.0f);
-		//m_view = cam.view;
-		//m_model = model;
+		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 1.5f, 1500000.0f);
+		m_view = cam.view;
+		m_model = model;
 		
 		//window.getWidth()
 		//window.getHeight()
@@ -90,18 +94,64 @@ namespace Simplex3D
 	void BatchRenderer::setVertices()
 	{
 		m_vertices = {
-			BatchVertex({-1.f,  1.f, 0.f}),//left-up
-			BatchVertex({ 1.f,  1.f, 0.f}),//right-up
-			BatchVertex({-1.f, -1.f, 0.f}),//left-down
-			BatchVertex({ 1.f, -1.f, 0.f}) //right-down
+			//BatchVertex({-1.f,  1.f, 0.f}),//left-up
+			//BatchVertex({ 1.f,  1.f, 0.f}),//right-up
+			//BatchVertex({-1.f, -1.f, 0.f}),//left-down
+			//BatchVertex({ 1.f, -1.f, 0.f}) //right-down
+			BatchVertex({-0.5f,  0.5f,  0.5f}),
+			BatchVertex({ 0.5f,  0.5f,  0.5f}),
+			BatchVertex({-0.5f, -0.5f,  0.5f}),
+			BatchVertex({ 0.5f, -0.5f,  0.5f}),
+			
+			BatchVertex({-0.5f,  0.5f, -0.5f}),
+			BatchVertex({ 0.5f,  0.5f, -0.5f}),
+			BatchVertex({-0.5f, -0.5f, -0.5f}),
+			BatchVertex({ 0.5f, -0.5f, -0.5f}),
+			
+			BatchVertex({-0.5f,  0.5f,  0.5f}),
+			BatchVertex({ 0.5f,  0.5f,  0.5f}),
+			BatchVertex({-0.5f,  0.5f, -0.5f}),
+			BatchVertex({ 0.5f,  0.5f, -0.5f}),
+
+			BatchVertex({-0.5f, -0.5f,  0.5f}),
+			BatchVertex({ 0.5f, -0.5f,  0.5f}),
+			BatchVertex({-0.5f, -0.5f, -0.5f}),
+			BatchVertex({ 0.5f, -0.5f, -0.5f}),
+			
+			BatchVertex({ 0.5f, -0.5f,  0.5f}),
+			BatchVertex({ 0.5f,  0.5f,  0.5f}),
+			BatchVertex({ 0.5f, -0.5f, -0.5f}),
+			BatchVertex({ 0.5f,  0.5f, -0.5f}),
+
+			BatchVertex({-0.5f, -0.5f,  0.5f}),
+			BatchVertex({-0.5f,  0.5f,  0.5f}),
+			BatchVertex({-0.5f, -0.5f, -0.5f}),
+			BatchVertex({-0.5f,  0.5f, -0.5f})
+			
 		};
 	}
 
 	void BatchRenderer::setIndices()
 	{
+
 		m_indices = {
 			0, 1, 2, //first triangle
-			2, 3, 1  //second triangle
+			2, 3, 1,  //second triangle
+
+			4, 5, 6, //first triangle
+			6, 7, 5,  //second triangle
+
+			8, 9, 10, //first triangle
+			10, 11, 9,  //second triangle
+
+			12, 13, 14, //first triangle
+			14, 15, 13,  //second triangle
+
+			16, 17, 18, //first triangle
+			18, 19, 17,  //second triangle
+
+			20, 21, 22, //first triangle
+			22, 23, 21,  //second triangle
 		};
 	}
 
@@ -113,7 +163,7 @@ namespace Simplex3D
 		//data:
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(BatchRenderer), m_vertices.data(), GL_STATIC_DRAW);//GL_STATIC_DRAW //GL_DYNAMIC_DRAW
 		//data:
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(U32), m_indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(U32), m_indices.data(), GL_DYNAMIC_DRAW);
 
 
 		//position attribute:
@@ -134,6 +184,8 @@ namespace Simplex3D
 
 
 		unBind();
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//GL_LINE  GL_FILL GL_POINT
 	}
 
 	void BatchRenderer::bind()

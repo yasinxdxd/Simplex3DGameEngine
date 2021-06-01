@@ -24,7 +24,6 @@ namespace Simplex3D
 		entity->setRotateX(rotation[0]);
 		entity->setRotateY(rotation[1]);
 		entity->setRotateZ(rotation[2]);
-		std::cout << pos[0] << std::endl;
 		
 	}
 

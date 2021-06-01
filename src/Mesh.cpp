@@ -68,9 +68,9 @@ namespace Simplex3D
 		//data:
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Simplex3D::Vertex), m_vertices.data(), GL_STATIC_DRAW);//GL_STATIC_DRAW //GL_DYNAMIC_DRAW
 		//data:
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(U16), m_indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(U32), m_indices.data(), GL_STATIC_DRAW);
 
-
+		
 		//position attribute:
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Simplex3D::Vertex), (void*)offsetof(Simplex3D::Vertex, Simplex3D::Vertex::position));
 		glEnableVertexAttribArray(0);
@@ -90,9 +90,19 @@ namespace Simplex3D
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//GL_LINE  GL_FILL GL_POINT
 	}
 
+	void Mesh::setVertices(std::vector<Simplex3D::Vertex> vertices)
+	{
+		m_vertices = vertices;
+	}
+
 	std::vector<Simplex3D::Vertex> Mesh::getVertices() const
 	{
 		return m_vertices;
+	}
+
+	void Mesh::setTexture(Texture2D& texture)
+	{
+		m_texture = texture;
 	}
 
 	void Mesh::draw(Window& window, Camera cam, glm::mat4 model, Shader& shader, glm::vec3 light_pos)
@@ -108,39 +118,41 @@ namespace Simplex3D
 		
 
 		//projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 1.5f, 1500000.0f);
+		m_projection = glm::perspective(glm::radians(45.f), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 1500000.0f);
 		m_view = cam.view;
 		m_model = model;
 
 
 
 		
+		shader.use();
+		glEnable(GL_MULTISAMPLE);
 
 		//all drawing stuff
-		shader.use();
 		shader.uniformMatrix4fv("model", 1, false, glm::value_ptr(m_model));
 		shader.uniformMatrix4fv("view", 1, false, glm::value_ptr(m_view));
 		shader.uniformMatrix4fv("projection", 1, false, glm::value_ptr(m_projection));
 		
-
 		//lightning
-		shader.use();
 		shader.uniform3f("light_position", light_pos.x, light_pos.y, light_pos.z);
 		shader.uniform3fv("view_position", 1, glm::value_ptr(cam.position));
-		bind();
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Simplex3D::Vertex), (void*)offsetof(Simplex3D::Vertex, Simplex3D::Vertex::normal));
-		glEnableVertexAttribArray(2);
-		unBind();
-
+		shader.uniform4f("material.ambient", 1.0f, 0.5f, 0.31f, 1);
+		shader.uniform4f("material.diffuse", 1.0f, 0.5f, 0.31f, 1);
+		shader.uniform4f("material.specular", 0.5f, 0.5f, 0.5f, 1);
+		shader.uniform1f("material.shininess", 64.f);
+		//bind();
+		//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Simplex3D::Vertex), (void*)offsetof(Simplex3D::Vertex, Simplex3D::Vertex::normal));
+		//glEnableVertexAttribArray(2);
+		//unBind();
 
 
 		
 		bind();
-		//if(m_indices.size() == 0)
-			glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-		//else
-			//glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+		//if(m_texture != NULL)
+		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 		unBind();
 	}
+
 
 }

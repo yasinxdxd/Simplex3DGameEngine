@@ -1,7 +1,7 @@
 #include "Entity.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-//#include <iostream>
+#include "Log.hh"
 
 namespace Simplex3D
 {
@@ -12,12 +12,19 @@ namespace Simplex3D
 
 	Entity::~Entity()
 	{ 
-		for (auto m : m_meshes)
-			delete m;
+		log("entity has been destroyed!");
+		//for (auto m : m_meshes)
+			//delete m;
 	}
 	
 
 	//setters:
+	void Entity::setTexture(Texture2D& texture)
+	{
+		for (auto& m : m_meshes)
+			m->setTexture(texture);
+	}
+
 	void Entity::setPosition(glm::vec3 position)
 	{
 		m_model_matrix = glm::translate(m_model_matrix, position);
@@ -115,14 +122,14 @@ namespace Simplex3D
 		return m_model_matrix[2][2];
 	}
 	
-	std::vector<Simplex3D::Mesh*> Entity::getMeshes() const
+	std::vector<Shared<Simplex3D::Mesh>> Entity::getMeshes() const
 	{
 		return m_meshes;
 	}
 
 	void Entity::drawMeshes(Window& window, Camera cam, glm::vec3 light_pos)
 	{
-		for (auto m : m_meshes)
+		for (auto& m : m_meshes)
 			m->draw(window, cam, m_model_matrix, m_shader, light_pos);
 	}
 

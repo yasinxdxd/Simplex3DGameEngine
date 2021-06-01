@@ -56,7 +56,7 @@ namespace Simplex3D
 		};
 	
 
-		m_meshes.push_back(new Mesh(vertices, indices));
+		m_meshes.push_back(Shared<Mesh>(new Mesh(vertices, indices)));
 
 	}
 

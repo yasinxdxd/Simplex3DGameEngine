@@ -4,6 +4,7 @@
 #include <sstream>
 #include <windows.h>
 #include "Vertex.hpp"
+#include "Entity.hpp"
 
 namespace Simplex3D
 {
@@ -528,6 +529,18 @@ namespace Simplex3D
 
         return rotationData;
 
+    }
+
+    void Utils::rayCastingMouse(Entity& entity)
+    {
+        for (auto& mesh : entity.getMeshes())
+        {
+            for (auto vertex : mesh->getVertices())
+            {
+                //vertex.position.
+            }
+        }
+        
     }
 
 
