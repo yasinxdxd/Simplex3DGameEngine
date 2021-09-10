@@ -1,3 +1,7 @@
-.vcxproj
-.vcxproj.filters
-.vcxproj.user
+*.vcxproj.filters
+*.vcxproj.user
+*.vcxproj
+*.exe
+./resources/textures/
+./resources/3D/
+./resources/bvh/
